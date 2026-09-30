@@ -1,7 +1,7 @@
 # BÀI TẬP 10: XÁC THỰC VÀ PHÂN QUYỀN VỚI JSON WEB TOKEN (JWT) TRÊN SPRING BOOT 3 & SPRING SECURITY 6
 
-> **Môn học:** Lập trình Web  
-> **Sinh viên thực hiện:** Đỗ Thanh Thành Tài
+> **Môn học:** Lập trình Web<br>
+> **Sinh viên thực hiện:** Đỗ Thanh Thành Tài<br>
 > **Mã nguồn GitHub:** [https://github.com/thnhtaii/LTWeb_BT10_3009](https://github.com/thnhtaii/LTWeb_BT10_3009)
 
 ---

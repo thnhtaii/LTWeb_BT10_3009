@@ -1,42 +1,85 @@
 $(document).ready(function() {
-    // Hiển thị thông tin người dùng đăng nhập thành công
-    $.ajax({
-        type: 'GET',
-        url: '/users/me',
-        dataType: 'json',
-        contentType: "application/json; charset=utf-8",
-        beforeSend: function (xhr) {
-            if (localStorage.token) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
-            }
-        },
-        success: function(data) {
-            var json = JSON.stringify(data, null, 4);
-            // $('#profile').html(json);
-            $('#profile').html("Xin chào: " + data.fullName + "<br><small class='text-muted'>Email: " + data.email + "</small>");
-            if (data.images) {
-                $('#images').attr('src', data.images);
-            }
-            // console.log("SUCCESS : ", data);
-            // alert('Hello ' + data.email + '! You have successfully accessed to /api/profile.');
-        },
-        error: function(e) {
-            // var json = e.responseText;
-            // $('#feedback').html(json);
-            // console.log("ERROR : ", e);
-            if (window.location.pathname.includes("/user/profile")) {
-                $('#profile').removeClass('alert-info').addClass('alert-danger').html("Bạn chưa đăng nhập hoặc phiên làm việc đã hết hạn.");
-            }
+
+    // 1. Tải thông tin cá nhân người dùng (/users/me) khi vào trang profile
+    if (window.location.pathname.includes("/user/profile")) {
+        if (!localStorage.token) {
+            window.location.href = "/login";
+            return;
         }
+
+        $.ajax({
+            type: 'GET',
+            url: '/users/me',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+            },
+            success: function(data) {
+                $('#user-fullname').text(data.fullName);
+                $('#user-email').text(data.email);
+                $('#json-preview').text(JSON.stringify(data, null, 2));
+
+                // Tự động tải danh sách người dùng ban đầu
+                loadAllUsers();
+            },
+            error: function() {
+                $('#user-fullname').text("Phiên đăng nhập đã hết hạn");
+                $('#user-email').text("Vui lòng đăng nhập lại");
+                setTimeout(function() {
+                    localStorage.clear();
+                    window.location.href = "/login";
+                }, 2000);
+            }
+        });
+    }
+
+    // 2. Hàm gọi API lấy danh sách toàn bộ người dùng (GET /users/)
+    function loadAllUsers() {
+        $.ajax({
+            type: 'GET',
+            url: '/users/',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (xhr) {
+                if (localStorage.token) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+                }
+            },
+            success: function(users) {
+                var tbody = $('#users-table-body');
+                tbody.empty();
+                if (users && users.length > 0) {
+                    users.forEach(function(user) {
+                        var row = '<tr>' +
+                            '<td>' + user.id + '</td>' +
+                            '<td>' + (user.fullName || '') + '</td>' +
+                            '<td>' + (user.email || '') + '</td>' +
+                            '</tr>';
+                        tbody.append(row);
+                    });
+                } else {
+                    tbody.append('<tr><td colspan="3" class="text-center text-muted">Chưa có người dùng nào</td></tr>');
+                }
+            },
+            error: function(err) {
+                console.error("Lỗi khi tải danh sách người dùng:", err);
+            }
+        });
+    }
+
+    // Nút "Xem danh sách người dùng"
+    $('#btn-load-users').click(function() {
+        loadAllUsers();
     });
 
-    // Hàm đăng xuất
+    // 3. Hàm Đăng xuất
     $('#logout').click(function() {
         localStorage.clear();
         window.location.href = "/login";
     });
 
-    // Hàm Login
+    // 4. Hàm Đăng nhập (trang /login)
     $('#login').click(function() {
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
@@ -58,11 +101,10 @@ $(document).ready(function() {
             data: basicInfo,
             success: function(data) {
                 localStorage.token = data.token;
-                // alert('Got a token from the server! Token: ' + data.token);
                 window.location.href = "/user/profile";
             },
             error: function(xhr) {
-                var message = "Login Failed";
+                var message = "Đăng nhập thất bại";
                 if (xhr.responseJSON && xhr.responseJSON.description) {
                     message += ": " + xhr.responseJSON.description;
                 }
