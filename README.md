@@ -375,21 +375,3 @@ mvn test
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 ```
-
----
-
-## 📌 Bảng đối chiếu 10 bước triển khai theo Slide bài giảng
-
-| Bước | Nội dung bài giảng (`04_JWT.pdf`) | File mã nguồn trong dự án | Trạng thái |
-| :---: | :--- | :--- | :---: |
-| **Bước 1** | Khai báo Dependency JJWT 0.12.6, Nimbus JOSE+JWT, Security 6, Data JPA | [`pom.xml`](pom.xml) | ✅ Hoàn thành |
-| **Bước 2** | Tạo Entity `User` implements `UserDetails, Serializable` | [`entity/User.java`](src/main/java/vn/iotstar/entity/User.java) | ✅ Hoàn thành |
-| **Bước 3** | Tạo các DTO / Models (`LoginResponse`, `LoginUserModel`, `RegisterUserModel`) | [`models/*`](src/main/java/vn/iotstar/models/) | ✅ Hoàn thành |
-| **Bước 4** | Khởi tạo Repository (`UserRepository`) và các Services (`UserService`, `AuthenticationService`, `JwtService`, `NimbusJwtService`) | [`repository/*`](src/main/java/vn/iotstar/repository/), [`services/*`](src/main/java/vn/iotstar/services/) | ✅ Hoàn thành |
-| **Bước 5** | Cấu hình Beans trong `ApplicationConfiguration` (`UserDetailsService`, `PasswordEncoder`, `AuthenticationManager`) | [`configs/ApplicationConfiguration.java`](src/main/java/vn/iotstar/configs/ApplicationConfiguration.java) | ✅ Hoàn thành |
-| **Bước 6** | Bộ lọc xác thực `JwtAuthenticationFilter` (`OncePerRequestFilter`) | [`filter/JwtAuthenticationFilter.java`](src/main/java/vn/iotstar/filter/JwtAuthenticationFilter.java) | ✅ Hoàn thành |
-| **Bước 7** | Cấu hình bảo mật phân quyền & CORS trong `SecurityConfiguration` (`SecurityFilterChain`) | [`configs/SecurityConfiguration.java`](src/main/java/vn/iotstar/configs/SecurityConfiguration.java) | ✅ Hoàn thành |
-| **Bước 8** | Xây dựng REST Controller (`AuthenticationController`, `UserController`) | [`controllers/AuthenticationController.java`](src/main/java/vn/iotstar/controllers/AuthenticationController.java), [`controllers/UserController.java`](src/main/java/vn/iotstar/controllers/UserController.java) | ✅ Hoàn thành |
-| **Bước 9** | Kiểm thử các API Endpoints với Postman và Unit Tests tự động | Postman / [`JwtAuthenticationTests.java`](src/test/java/vn/iotstar/JwtAuthenticationTests.java) | ✅ Hoàn thành |
-| **Bước 10**| Xử lý ngoại lệ toàn cục & Xây dựng giao diện đăng nhập, profile qua AJAX | [`GlobalExceptionHandler.java`](src/main/java/vn/iotstar/configs/GlobalExceptionHandler.java), [`login.html`](src/main/resources/templates/login.html), [`profile.html`](src/main/resources/templates/profile.html), [`mainjs.js`](src/main/resources/static/js/mainjs.js) | ✅ Hoàn thành |
-
