@@ -1,12 +1,3 @@
--- =========================================================
--- SCRIPT TẠO DATABASE VÀ BẢNG DỮ LIỆU CHO BÀI TẬP JWT
--- =========================================================
-
--- =========================================================
--- 1. DÀNH CHO MICROSOFT SQL SERVER (SSMS / SQLEXPRESS)
--- =========================================================
-
--- Tạo Database nếu chưa tồn tại
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'jwt_springboot3')
 BEGIN
     CREATE DATABASE jwt_springboot3;
