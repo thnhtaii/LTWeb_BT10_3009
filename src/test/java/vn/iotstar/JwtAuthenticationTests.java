@@ -32,18 +32,18 @@ class JwtAuthenticationTests {
 
     @Test
     void testCompleteJwtFlow() throws Exception {
-        // 1. Register User
-        RegisterUserModel registerDto = new RegisterUserModel("trungnh@hcmute.edu.vn", "123456", "Nguyen Huu Trung");
+        // 1. Register User Thanh Tài
+        RegisterUserModel registerDto = new RegisterUserModel("thanhtai@gmail.com", "123456", "Thanh Tài");
 
         mockMvc.perform(post("/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("trungnh@hcmute.edu.vn"))
-                .andExpect(jsonPath("$.fullName").value("Nguyen Huu Trung"));
+                .andExpect(jsonPath("$.email").value("thanhtai@gmail.com"))
+                .andExpect(jsonPath("$.fullName").value("Thanh Tài"));
 
         // 2. Login User to get JWT
-        LoginUserModel loginDto = new LoginUserModel("trungnh@hcmute.edu.vn", "123456");
+        LoginUserModel loginDto = new LoginUserModel("thanhtai@gmail.com", "123456");
 
         MvcResult loginResult = mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,8 +61,8 @@ class JwtAuthenticationTests {
         mockMvc.perform(get("/users/me")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("trungnh@hcmute.edu.vn"))
-                .andExpect(jsonPath("$.fullName").value("Nguyen Huu Trung"));
+                .andExpect(jsonPath("$.email").value("thanhtai@gmail.com"))
+                .andExpect(jsonPath("$.fullName").value("Thanh Tài"));
 
         // 4. Access /users/ with Bearer token
         mockMvc.perform(get("/users/")
@@ -74,7 +74,7 @@ class JwtAuthenticationTests {
         mockMvc.perform(get("/users/me"))
                 .andExpect(status().isForbidden());
 
-        // 6. Access /users/me with invalid token -> rejected / 403
+        // 6. Access /users/me with invalid token -> rejected
         mockMvc.perform(get("/users/me")
                         .header("Authorization", "Bearer invalid.jwt.token"))
                 .andExpect(status().is4xxClientError());

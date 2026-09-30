@@ -44,6 +44,13 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
+		<!-- SQL Server Connector -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- MySQL Connector -->
 		<dependency>
 			<groupId>com.mysql</groupId>
