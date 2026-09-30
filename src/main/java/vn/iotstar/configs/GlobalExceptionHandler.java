@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.nimbusds.jose.JOSEException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.security.SignatureException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,6 +25,7 @@ public class GlobalExceptionHandler {
         // TODO send this stack trace to an observability tool
         exception.printStackTrace();
 
+        // Theo Slide 30:
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
             errorDetail.setProperty("description", "The username or password is incorrect");
@@ -40,9 +44,21 @@ public class GlobalExceptionHandler {
             return errorDetail;
         }
 
-        if (exception instanceof JOSEException || exception instanceof ParseException) {
+        if (exception instanceof SignatureException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+            errorDetail.setProperty("description", "The JWT signature is invalid");
+            return errorDetail;
+        }
+
+        if (exception instanceof ExpiredJwtException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+            errorDetail.setProperty("description", "The JWT token has expired");
+            return errorDetail;
+        }
+
+        if (exception instanceof JwtException || exception instanceof JOSEException || exception instanceof ParseException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
-            errorDetail.setProperty("description", "The JWT token or signature is invalid");
+            errorDetail.setProperty("description", "The JWT token is invalid");
             return errorDetail;
         }
 

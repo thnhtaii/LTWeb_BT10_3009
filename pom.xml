@@ -12,10 +12,11 @@
 	<artifactId>BT10_3009</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JWT_springboot3</name>
-	<description>Demo JWT with Nimbus JOSE + JWT on Spring Boot 3 - Security 6</description>
+	<description>Demo JWT with Spring Boot 3 - Security 6</description>
 
 	<properties>
 		<java.version>17</java.version>
+		<jjwt.version>0.12.6</jjwt.version>
 		<nimbus.version>9.40</nimbus.version>
 	</properties>
 
@@ -58,7 +59,26 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Nimbus JOSE + JWT Library -->
+		<!-- Bước 1 trong Slide 15: Thư viện JJWT 0.12.6 -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Thư viện Nimbus JOSE + JWT thay thế -->
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
